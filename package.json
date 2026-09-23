@@ -9,7 +9,6 @@
     "preview": "node ./node_modules/vite/bin/vite.js preview --host 127.0.0.1",
     "typecheck": "tsc --noEmit",
     "test:routes": "node scripts/route-smoke.mjs",
-    "test:auth": "node scripts/auth-smoke.mjs",
     "format": "prettier --write src scripts README.md index.html vite.config.ts tailwind.config.js postcss.config.cjs tsconfig.json package.json"
   },
   "dependencies": {

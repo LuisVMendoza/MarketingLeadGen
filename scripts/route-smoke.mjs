@@ -51,8 +51,23 @@ try {
   );
   if (!home.includes("Five perspectives."))
     throw new Error("Comparison page did not render");
+  const { default: PreviewGate } = await vite.ssrLoadModule(
+    "/src/preview-gate.tsx",
+  );
+  const locked = renderToString(
+    React.createElement(
+      PreviewGate,
+      null,
+      React.createElement("div", null, "PRIVATE_PREVIEW_CONTENT"),
+    ),
+  );
+  if (
+    !locked.includes("Access the preview") ||
+    locked.includes("PRIVATE_PREVIEW_CONTENT")
+  )
+    throw new Error("Preview gate did not conceal the app");
   console.log(
-    `Rendered ${checked} nested routes and the comparison page successfully.`,
+    `Rendered ${checked} nested routes, the comparison page, and the locked preview successfully.`,
   );
 } finally {
   await vite.close();

@@ -1,0 +1,227 @@
+.preview-gate {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 28px;
+  background:
+    radial-gradient(circle at 15% 15%, #e9efff, transparent 32%), #f3f6fa;
+  color: #1d2b42;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+.preview-login {
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) minmax(340px, 0.9fr);
+  width: min(900px, 100%);
+  min-height: 500px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #dce5f1;
+  border-radius: 18px;
+  box-shadow: 0 24px 65px #17325616;
+}
+.preview-login-intro {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 50px;
+  padding: 39px 42px;
+  background: linear-gradient(145deg, #123665, #132644 80%);
+  color: #fff;
+}
+.preview-login-brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.preview-login-mark {
+  display: grid;
+  place-items: center;
+  width: 35px;
+  height: 35px;
+  border-radius: 8px;
+  background: #fff;
+  color: #14447f;
+  font-weight: 900;
+  letter-spacing: -0.08em;
+}
+.preview-login-kicker {
+  color: #9ec4ff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+.preview-login-intro h1 {
+  max-width: 340px;
+  margin: 16px 0 14px;
+  font-size: clamp(30px, 4vw, 43px);
+  line-height: 1.08;
+  letter-spacing: -0.055em;
+}
+.preview-login-intro p {
+  max-width: 320px;
+  margin: 0;
+  color: #bfd2ea;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.preview-login-versions {
+  display: flex;
+  gap: 7px;
+}
+.preview-login-versions span {
+  display: grid;
+  place-items: center;
+  width: 37px;
+  height: 30px;
+  border: 1px solid #ffffff47;
+  border-radius: 6px;
+  color: #e1edff;
+  font-size: 11px;
+  font-weight: 800;
+}
+.preview-login-form-area {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 58px clamp(30px, 5vw, 62px);
+}
+.preview-login-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 26px;
+  border-radius: 12px;
+  background: #eaf2ff;
+  color: #2458a5;
+}
+.preview-login-form-area h2 {
+  margin: 0 0 9px;
+  color: #1b2e49;
+  font-size: 25px;
+  letter-spacing: -0.04em;
+}
+.preview-login-form-area > p {
+  margin: 0 0 29px;
+  color: #6c7d91;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.preview-login-form-area form label {
+  display: block;
+  margin-bottom: 9px;
+  color: #344b69;
+  font-size: 12px;
+  font-weight: 750;
+}
+.preview-password-field {
+  display: flex;
+  height: 47px;
+  border: 1px solid #cbd7e6;
+  border-radius: 8px;
+  background: #fff;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.preview-password-field:focus-within {
+  border-color: #3b74c4;
+  box-shadow: 0 0 0 3px #2f75d01f;
+}
+.preview-password-field input {
+  flex: 1;
+  width: 100%;
+  padding: 0 13px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #1b2e49;
+  font: inherit;
+  font-size: 14px;
+}
+.preview-password-field button {
+  display: grid;
+  place-items: center;
+  width: 45px;
+  border: 0;
+  background: transparent;
+  color: #667b97;
+  cursor: pointer;
+}
+.preview-password-field button:hover {
+  color: #2358a5;
+}
+.preview-login-error {
+  margin: 9px 0 0;
+  color: #b33643;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.preview-login-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  min-height: 46px;
+  margin-top: 18px;
+  border: 0;
+  border-radius: 8px;
+  background: #245fae;
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 750;
+  cursor: pointer;
+}
+.preview-login-submit:hover {
+  background: #1b508f;
+}
+.preview-login-submit:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+.preview-login-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 31px;
+  color: #8091a5;
+  font-size: 11px;
+}
+@media (max-width: 720px) {
+  .preview-gate {
+    padding: 16px;
+  }
+  .preview-login {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+  .preview-login-intro {
+    gap: 22px;
+    padding: 25px 27px;
+  }
+  .preview-login-intro h1 {
+    margin: 0 0 7px;
+    font-size: 27px;
+  }
+  .preview-login-intro p,
+  .preview-login-kicker,
+  .preview-login-versions {
+    display: none;
+  }
+  .preview-login-form-area {
+    padding: 33px 27px 37px;
+  }
+}

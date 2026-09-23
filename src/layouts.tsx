@@ -128,11 +128,12 @@ export function PeriodSelect() {
 }
 function VersionSelect() {
   const { version } = useApp();
+  const navigate = useNavigate();
   return (
     <label className="select-wrap version-select">
       <select
         value={version}
-        onChange={(e) => window.location.assign(`/${e.target.value}/`)}
+        onChange={(e) => navigate(`/${e.target.value}/`)}
         aria-label="Switch design concept"
       >
         {proposals.map((p) => (
@@ -589,6 +590,7 @@ function V3Layout({ children }: { children: ReactNode }) {
 function V4Layout({ children }: { children: ReactNode }) {
   const [tools, setTools] = useState(false);
   const { version, openModal } = useApp();
+  const navigate = useNavigate();
   return (
     <div className="v4-layout">
       <aside className="v4-sidebar">
@@ -627,9 +629,7 @@ function V4Layout({ children }: { children: ReactNode }) {
             </button>
             <button
               className="icon-button"
-              onClick={() =>
-                window.location.assign(`/${version}/new-biz-intake`)
-              }
+              onClick={() => navigate(`/${version}/new-biz-intake`)}
               aria-label="AI agent"
             >
               <Bot size={18} />

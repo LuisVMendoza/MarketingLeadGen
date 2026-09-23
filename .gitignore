@@ -4,5 +4,4 @@ dist/
 reference-sheet.jpg
 *.log
 *.tsbuildinfo
-.dev.vars*
 .env*

@@ -17,25 +17,23 @@ If your shell cannot keep an npm development script running, start Vite directly
 
 Run `npm run test:routes` to render and check every nested route in all five concepts.
 
-## Share for a few days with a password
+## Share briefly with GitHub Pages
 
-GitHub Pages does not provide password protection for a normal project site. Keep the source in a **private GitHub repository** and deploy it through **Cloudflare Pages**. This project includes a Pages middleware that requires HTTP Basic authentication before serving routes or static assets. The login name is `preview`; choose your own password. Do not put the password in the repository or in a Vite environment variable.
+The app opens on a password screen before showing the comparison or any of the five concepts. The password is represented by a SHA-256 hash in `src/preview-gate.tsx`; the text is not committed. A successful login lasts for the current browser tab. This is a **visual gate in client code**: GitHub Pages still publishes the JavaScript and mock data publicly, and someone technically inclined can bypass it. Use it only for this short-lived prototype, not for private data.
 
-1. Create an empty **private** repository on GitHub. In this project directory, run:
+1. This checkout already points to `https://github.com/LuisVMendoza/MarketingLeadGen.git`. GitHub Free requires a public repository for Pages. In this project directory, run:
 
    ```bash
    git add .
-   git commit -m "Prepare private preview"
-   git remote add origin https://github.com/YOUR_USER/YOUR_REPO.git
-   git push -u origin main
+   git commit -m "Prepare GitHub Pages preview"
+   git push origin main
    ```
 
-2. In [Cloudflare Workers & Pages](https://dash.cloudflare.com/), select **Create application > Pages > Connect to Git**, and select that repository. Set production branch to `main`, build command to `npm run build`, and output directory to `dist`. The first deployment will return 503 until the password is configured.
-3. In the new Pages project, open **Settings > Variables and Secrets > Add**. Create `SITE_PASSWORD`, enter a strong temporary password, select **Encrypt**, and save it for the **Production** environment. Redeploy the project so the secret takes effect. If you share a preview branch URL too, configure the same secret for the **Preview** environment.
-4. Open the production `*.pages.dev` URL in a private browser window. The browser should request username `preview` and your password. Test a nested route and an asset URL without signing in; both should be denied. Share only the URL, username, and password with the intended reviewers.
-5. When the review ends, delete the Cloudflare Pages project to remove the hosted site. The GitHub repository can remain private or be deleted separately.
+2. In the repository, open **Settings > Pages > Build and deployment**, and set **Source** to **GitHub Actions**. The workflow in `.github/workflows/deploy.yml` builds and publishes the app after every push to `main`.
+3. After the action succeeds, open `https://LuisVMendoza.github.io/MarketingLeadGen/`. Enter the preview password to reach the comparison page. Navigation uses URL hashes (`#/v1/`, `#/v2/`, and so on), so every concept can be opened and refreshed on GitHub Pages.
+4. When the review ends, disable Pages in repository settings or delete the repository. Previously downloaded files and screenshots cannot be recalled.
 
-The explicit `public/_routes.json` makes the authentication middleware run on every request, including JavaScript and CSS assets. If `SITE_PASSWORD` is missing, the site refuses to serve content. Local Vite development remains password-free. Run `npm run test:auth` to check this behavior.
+The build uses the repository name as Vite's asset base path. Local `npm run dev` keeps normal browser routes. The published page also asks search engines not to index it, but that request does not make it private.
 
 ## Explore
 
