@@ -1,0 +1,33 @@
+{
+  "name": "5w-marketing-lead-gen-concepts",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node ./node_modules/vite/bin/vite.js --host 127.0.0.1",
+    "build": "tsc -b && vite build",
+    "preview": "node ./node_modules/vite/bin/vite.js preview --host 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "test:routes": "node scripts/route-smoke.mjs",
+    "test:auth": "node scripts/auth-smoke.mjs",
+    "format": "prettier --write src scripts README.md index.html vite.config.ts tailwind.config.js postcss.config.cjs tsconfig.json package.json"
+  },
+  "dependencies": {
+    "lucide-react": "^0.468.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.0.0",
+    "recharts": "^2.15.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "prettier": "^3.9.9",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5"
+  }
+}

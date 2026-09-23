@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.reference/
+reference-sheet.jpg
+*.log
+*.tsbuildinfo
+.dev.vars*
+.env*

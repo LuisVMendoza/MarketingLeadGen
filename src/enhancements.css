@@ -1,0 +1,45 @@
+.widget-config {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  flex-wrap: wrap;
+  background: #fff;
+  border: 1px solid #dce4ee;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: -7px 0 17px;
+  font-size: 11px;
+  color: #53657c;
+}
+.widget-config strong {
+  color: #172a43;
+}
+.widget-config label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+.widget-config input {
+  accent-color: #1c62c8;
+}
+.v1-actions {
+  grid-row: auto;
+}
+.v4-quick {
+  min-height: 30px;
+  padding: 6px 10px;
+  font-size: 10px;
+}
+.theme-v2 .contact-drawer {
+  box-shadow: -20px 0 60px #0002;
+}
+@media (max-width: 650px) {
+  .widget-config {
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .widget-config strong {
+    width: 100%;
+  }
+}
