@@ -830,7 +830,7 @@ function Dashboard() {
                 <i /> Qualified leads
               </span>
             </div>
-            <TrendChart second color="#ee7224" height={254} />
+            <TrendChart second color="#7048bf" height={254} />
           </section>
           <section className="panel professional-attention">
             <SectionTitle

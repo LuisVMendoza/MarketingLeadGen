@@ -17,7 +17,7 @@ Run `npm run build` to verify the production bundle and `npm run test:routes` to
 
 ## Explore
 
-The root URL opens the dashboard after the password screen. The sidebar links to contacts, companies, segments, campaigns, automations, templates, forms, reports, traffic, paid ads, AI lead intake, sites, integrations, and settings. **All tools** opens the full module list, including less frequently used screens.
+The root URL opens the dashboard after the password screen. The narrow category rail selects a section, while the adjacent panel shows its tools and quick links. **All tools** opens the full module list, including less frequently used screens.
 
 The dashboard includes lead metrics, a performance chart, contacts needing attention, active campaigns, and a workflow canvas. Each module has mock interactions such as filtering, creating a draft, editing a contact, changing settings, or switching the active site. Changes remain in browser memory for the current session.
 

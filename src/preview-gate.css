@@ -4,17 +4,17 @@
   min-height: 100vh;
   min-height: 100dvh;
   padding: 20px;
-  background: #fbf9f6;
-  color: #24211e;
+  background: #f8f7fb;
+  color: #292434;
   font-family: Inter, "Segoe UI", Arial, sans-serif;
 }
 .preview-login {
   width: min(390px, 100%);
   padding: 35px;
-  border: 1px solid #e9dfd5;
+  border: 1px solid #e7e2ee;
   border-radius: 16px;
   background: #fff;
-  box-shadow: 0 16px 50px #4638280b;
+  box-shadow: 0 16px 50px #3725510d;
 }
 .preview-login-brand {
   display: flex;
@@ -28,7 +28,7 @@
   width: 39px;
   height: 39px;
   border-radius: 10px;
-  background: #f37021;
+  background: #7048bf;
   color: #fff;
   font-size: 15px;
   font-weight: 850;
@@ -43,7 +43,7 @@
   letter-spacing: -0.03em;
 }
 .preview-login-brand small {
-  color: #847971;
+  color: #7c738b;
   font-size: 9px;
   font-weight: 750;
   letter-spacing: 0.14em;
@@ -51,14 +51,14 @@
 .preview-login > label {
   display: block;
   margin-bottom: 9px;
-  color: #4c4540;
+  color: #50475c;
   font-size: 12px;
   font-weight: 750;
 }
 .preview-password-field {
   display: flex;
   height: 46px;
-  border: 1px solid #d9cec4;
+  border: 1px solid #dcd4e8;
   border-radius: 8px;
   background: #fff;
   transition:
@@ -66,8 +66,8 @@
     box-shadow 0.2s;
 }
 .preview-password-field:focus-within {
-  border-color: #ed7b33;
-  box-shadow: 0 0 0 3px #f370211f;
+  border-color: #7048bf;
+  box-shadow: 0 0 0 3px #7048bf1f;
 }
 .preview-password-field input {
   flex: 1;
@@ -76,7 +76,7 @@
   border: 0;
   outline: 0;
   background: transparent;
-  color: #24211e;
+  color: #292434;
   font: inherit;
   font-size: 14px;
 }
@@ -89,7 +89,7 @@
   color: #877b73;
 }
 .preview-password-field button:hover {
-  color: #e96318;
+  color: #7048bf;
 }
 .preview-login-error {
   margin: 9px 0 0;
@@ -106,14 +106,14 @@
   margin-top: 17px;
   border: 0;
   border-radius: 8px;
-  background: #f37021;
+  background: #7048bf;
   color: #fff;
   font: inherit;
   font-size: 13px;
   font-weight: 750;
 }
 .preview-login-submit:hover {
-  background: #df5c12;
+  background: #5c35a5;
 }
 .preview-login-submit:disabled {
   opacity: 0.65;

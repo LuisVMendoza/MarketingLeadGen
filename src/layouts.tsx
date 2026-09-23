@@ -406,7 +406,7 @@ function V1Layout({ children }: { children: ReactNode }) {
   );
 }
 function V2Layout({ children }: { children: ReactNode }) {
-  const { section, site, setSite, connectedSites, toast } = useApp();
+  const { section, version, toast } = useApp();
   const [tools, setTools] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   useEffect(() => setMobileOpen(false), [section]);
@@ -418,119 +418,115 @@ function V2Layout({ children }: { children: ReactNode }) {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [mobileOpen]);
-  const groups: { label: string; items: [string, string][] }[] = [
-    {
-      label: "Workspace",
-      items: [
-        ["dashboard", "Dashboard"],
-        ["contacts", "Contacts"],
-        ["companies", "Companies"],
-        ["segments", "Segments"],
-      ],
-    },
-    {
-      label: "Marketing",
-      items: [
-        ["campaigns", "Campaigns"],
-        ["automations", "Automations"],
-        ["email-templates", "Email templates"],
-        ["forms", "Forms"],
-      ],
-    },
-    {
-      label: "Insights",
-      items: [
-        ["reports", "Reports"],
-        ["traffic", "Traffic"],
-        ["paid-ads-analytics", "Paid ads"],
-      ],
-    },
-    {
-      label: "Tools",
-      items: [
-        ["new-biz-intake", "AI lead intake"],
-        ["sites", "Sites"],
-        ["integrations", "Integrations"],
-      ],
-    },
-  ];
+  const current =
+    navGroups.find((group) =>
+      group.items.some(
+        ([path]) => section === path || section.startsWith(`${path}/`),
+      ),
+    ) || navGroups[0];
+  const quickAccess = ([
+    ["dashboard", "Overview"],
+    ["contacts", "All contacts"],
+    ["automations", "Workflows"],
+  ] as [string, string][]).filter(
+    ([path]) => !current.items.some(([item]) => item === path),
+  );
   return (
-    <div className="v2-layout professional-shell">
+    <div className="v2-layout professional-shell identity-shell">
       {mobileOpen && (
         <button
-          className="professional-sidebar-scrim"
+          className="identity-navigation-scrim"
           aria-label="Close navigation"
           onClick={() => setMobileOpen(false)}
         />
       )}
-      <aside className={`professional-sidebar ${mobileOpen ? "open" : ""}`}>
-        <Link
-          className="professional-brand"
-          to="/v2/"
-          onClick={() => setMobileOpen(false)}
+      <div className={`identity-navigation ${mobileOpen ? "open" : ""}`}>
+        <aside
+          className="v2-rail identity-rail"
+          aria-label="Workspace categories"
         >
-          <span className="professional-brand-mark">5W</span>
-          <span>
-            <strong>5W Marketing</strong>
-            <small>LEAD GEN SUITE</small>
-          </span>
-        </Link>
-        <label className="professional-site-card">
-          <span className="professional-site-avatar">5</span>
-          <span className="professional-site-copy">
-            <strong>{site === "All sites" ? "All sites" : site}</strong>
-            <small>Workspace · {connectedSites.length} connected sites</small>
-          </span>
-          <ChevronDown size={15} />
-          <select
-            aria-label="Select site"
-            value={site}
-            onChange={(event) => setSite(event.target.value)}
+          <Link
+            className="identity-mark"
+            to="/v2/"
+            aria-label="5W dashboard"
+            onClick={() => setMobileOpen(false)}
           >
-            <option>All sites</option>
-            {connectedSites.map((item) => (
-              <option key={item.name}>{item.name}</option>
-            ))}
-          </select>
-        </label>
-        <nav className="professional-sidebar-nav" aria-label="Main navigation">
-          {groups.map((group) => (
-            <section key={group.label}>
-              <h2>{group.label}</h2>
-              {group.items.map(([path, label]) => (
-                <NavItem
-                  key={path}
-                  path={path}
-                  label={label}
-                  close={() => setMobileOpen(false)}
-                />
-              ))}
-            </section>
-          ))}
+            5W
+          </Link>
+          <nav className="rail-icons" aria-label="Tool categories">
+            {navGroups.map((group, index) => {
+              const Icon = groupIcons[index];
+              return (
+                <Link
+                  key={group.label}
+                  className={current.label === group.label ? "active" : ""}
+                  to={`/${version}/${group.items[0][0]}`}
+                  title={group.label}
+                  aria-label={group.label}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <Icon size={19} strokeWidth={1.8} />
+                </Link>
+              );
+            })}
+          </nav>
           <button
-            className="professional-all-tools"
             onClick={() => setTools(true)}
+            title="All tools"
+            aria-label="All tools"
           >
-            <LayoutGrid size={17} /> All tools <ArrowRight size={14} />
+            <LayoutGrid size={19} />
           </button>
-        </nav>
-        <div className="professional-sidebar-footer">
-          <NavItem
-            path="settings"
-            label="Settings"
-            close={() => setMobileOpen(false)}
-          />
-          <div className="professional-user">
-            <span>LM</span>
-            <div>
-              <strong>Preview workspace</strong>
-              <small>Design review</small>
-            </div>
+          <span className="rail-avatar">LM</span>
+        </aside>
+        <aside className="v2-context identity-context">
+          <div className="identity-context-heading">
+            <span>5W Marketing</span>
+            <small>LEAD GEN SUITE</small>
           </div>
-        </div>
-      </aside>
+          <button
+            className="command-trigger"
+            onClick={() => window.dispatchEvent(new Event("open-command"))}
+          >
+            <Search size={16} /> Search tools <kbd>Ctrl K</kbd>
+          </button>
+          <div className="context-group identity-current-group">
+            <small>{current.label.toUpperCase()}</small>
+            {current.items.map(([path, label]) => (
+              <NavItem
+                key={path}
+                path={path}
+                label={label}
+                close={() => setMobileOpen(false)}
+              />
+            ))}
+          </div>
+          <div className="context-divider" />
+          <div className="context-group identity-pinned-group">
+            <small>QUICK ACCESS</small>
+            {quickAccess.map(([path, label]) => (
+              <NavItem
+                key={path}
+                path={path}
+                label={label}
+                close={() => setMobileOpen(false)}
+              />
+            ))}
+          </div>
+          <div className="context-footer">
+            {current.label !== "Settings" && (
+              <NavItem
+                path="settings"
+                label="Settings"
+                close={() => setMobileOpen(false)}
+              />
+            )}
+            <SiteSelect />
+          </div>
+        </aside>
+      </div>
       <div className="v2-workspace">
-        <header className="professional-topbar">
+        <header className="professional-topbar identity-topbar">
           <button
             className="professional-menu-button"
             onClick={() => setMobileOpen((current) => !current)}
@@ -539,9 +535,9 @@ function V2Layout({ children }: { children: ReactNode }) {
           >
             <PanelLeft size={18} />
           </button>
-          <span className="professional-topbar-title">Marketing Suite</span>
-          <span className="professional-topbar-divider" />
-          <SiteSelect />
+          <span className="professional-topbar-title">
+            Workspace <span>/</span> {current.label}
+          </span>
           <button
             className="professional-topbar-search"
             onClick={() => window.dispatchEvent(new Event("open-command"))}
@@ -557,9 +553,7 @@ function V2Layout({ children }: { children: ReactNode }) {
           >
             <Bell size={18} />
           </button>
-          <span className="professional-system-status">
-            <i /> All systems live
-          </span>
+          <span className="identity-topbar-badge">5W Marketing Lead Gen</span>
         </header>
         {children}
       </div>
