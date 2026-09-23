@@ -1,11 +1,5 @@
 import { useState, type FormEvent, type ReactNode } from "react";
-import {
-  ArrowRight,
-  Eye,
-  EyeOff,
-  LockKeyhole,
-  ShieldCheck,
-} from "lucide-react";
+import { ArrowRight, Eye, EyeOff } from "lucide-react";
 import "./preview-gate.css";
 
 // A lightweight gate for a short-lived public prototype. This is not server auth.
@@ -63,85 +57,56 @@ export default function PreviewGate({ children }: { children: ReactNode }) {
 
   return (
     <main className="preview-gate" lang="en">
-      <div className="preview-login">
-        <section className="preview-login-intro">
-          <div className="preview-login-brand">
-            <span className="preview-login-mark">5W</span>
-            <span>Marketing Lead Gen</span>
-          </div>
-          <div>
-            <span className="preview-login-kicker">PRIVATE DESIGN PREVIEW</span>
-            <h1>Explore five design directions.</h1>
-            <p>
-              A review space to compare the interfaces and explore their tools.
-            </p>
-          </div>
-          <div
-            className="preview-login-versions"
-            aria-label="Available concepts"
+      <form className="preview-login" onSubmit={submit}>
+        <div className="preview-login-brand">
+          <span className="preview-login-mark">5W</span>
+          <span>
+            <strong>5W Marketing</strong>
+            <small>LEAD GEN SUITE</small>
+          </span>
+        </div>
+        <label htmlFor="preview-password">Password</label>
+        <div className="preview-password-field">
+          <input
+            id="preview-password"
+            type={visible ? "text" : "password"}
+            autoComplete="current-password"
+            autoFocus
+            required
+            value={password}
+            onChange={(event) => {
+              setPassword(event.target.value);
+              if (error) setError("");
+            }}
+            aria-invalid={Boolean(error)}
+            aria-describedby={error ? "preview-password-error" : undefined}
+          />
+          <button
+            type="button"
+            onClick={() => setVisible((current) => !current)}
+            aria-label={visible ? "Hide password" : "Show password"}
           >
-            {(["V1", "V2", "V3", "V4", "V5"] as const).map((version) => (
-              <span key={version}>{version}</span>
-            ))}
-          </div>
-        </section>
-        <section className="preview-login-form-area">
-          <div className="preview-login-icon">
-            <LockKeyhole size={22} strokeWidth={1.8} />
-          </div>
-          <h2>Access the preview</h2>
-          <p>
-            Enter the password to view the comparison and all five concepts.
+            {visible ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
+        </div>
+        {error && (
+          <p
+            className="preview-login-error"
+            id="preview-password-error"
+            role="alert"
+          >
+            {error}
           </p>
-          <form onSubmit={submit}>
-            <label htmlFor="preview-password">Password</label>
-            <div className="preview-password-field">
-              <input
-                id="preview-password"
-                type={visible ? "text" : "password"}
-                autoComplete="current-password"
-                autoFocus
-                required
-                value={password}
-                onChange={(event) => {
-                  setPassword(event.target.value);
-                  if (error) setError("");
-                }}
-                aria-invalid={Boolean(error)}
-                aria-describedby={error ? "preview-password-error" : undefined}
-              />
-              <button
-                type="button"
-                onClick={() => setVisible((current) => !current)}
-                aria-label={visible ? "Hide password" : "Show password"}
-              >
-                {visible ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
-            </div>
-            {error && (
-              <p
-                className="preview-login-error"
-                id="preview-password-error"
-                role="alert"
-              >
-                {error}
-              </p>
-            )}
-            <button
-              className="preview-login-submit"
-              type="submit"
-              disabled={checking}
-            >
-              {checking ? "Checking..." : "Enter preview"}
-              <ArrowRight size={17} />
-            </button>
-          </form>
-          <div className="preview-login-note">
-            <ShieldCheck size={16} />
-            <span>Temporary design preview</span>
-          </div>
-        </section>
-      </div>
+        )}
+        <button
+          className="preview-login-submit"
+          type="submit"
+          disabled={checking}
+        >
+          {checking ? "Checking..." : "Continue"}
+          <ArrowRight size={17} />
+        </button>
+      </form>
     </main>
   );
 }

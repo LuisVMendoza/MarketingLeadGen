@@ -2,6 +2,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import {
   Activity,
+  ArrowRight,
   BarChart3,
   Bell,
   Blocks,
@@ -76,7 +77,7 @@ function NavItem({
   const active =
     section === path ||
     (path === "contacts" && section.startsWith("contacts/")) ||
-    (path === "settings" && section === "settings");
+    (path === "settings" && section.startsWith("settings/"));
   return (
     <Link
       to={`/${version}/${path}`}
@@ -252,7 +253,7 @@ function AllTools({
         </div>
         <footer>
           <span>5W Marketing Lead Gen</span>
-          <VersionSelect />
+          {version !== "v2" && <VersionSelect />}
         </footer>
       </div>
     </div>
@@ -405,78 +406,164 @@ function V1Layout({ children }: { children: ReactNode }) {
   );
 }
 function V2Layout({ children }: { children: ReactNode }) {
-  const { section, version } = useApp();
+  const { section, site, setSite, connectedSites, toast } = useApp();
   const [tools, setTools] = useState(false);
-  const current =
-    navGroups.find((g) =>
-      g.items.some(
-        ([path]) => section === path || section.startsWith(path + "/"),
-      ),
-    ) || navGroups[0];
+  const [mobileOpen, setMobileOpen] = useState(false);
+  useEffect(() => setMobileOpen(false), [section]);
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMobileOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [mobileOpen]);
+  const groups: { label: string; items: [string, string][] }[] = [
+    {
+      label: "Workspace",
+      items: [
+        ["dashboard", "Dashboard"],
+        ["contacts", "Contacts"],
+        ["companies", "Companies"],
+        ["segments", "Segments"],
+      ],
+    },
+    {
+      label: "Marketing",
+      items: [
+        ["campaigns", "Campaigns"],
+        ["automations", "Automations"],
+        ["email-templates", "Email templates"],
+        ["forms", "Forms"],
+      ],
+    },
+    {
+      label: "Insights",
+      items: [
+        ["reports", "Reports"],
+        ["traffic", "Traffic"],
+        ["paid-ads-analytics", "Paid ads"],
+      ],
+    },
+    {
+      label: "Tools",
+      items: [
+        ["new-biz-intake", "AI lead intake"],
+        ["sites", "Sites"],
+        ["integrations", "Integrations"],
+      ],
+    },
+  ];
   return (
-    <div className="v2-layout">
-      <aside className="v2-rail">
-        <Brand full={false} />
-        <div className="rail-icons">
-          {navGroups.map((g, i) => {
-            const Icon = groupIcons[i];
-            return (
-              <Link
-                key={g.label}
-                className={current.label === g.label ? "active" : ""}
-                to={`/${version}/${g.items[0][0]}`}
-                title={g.label}
-              >
-                <Icon size={20} />
-              </Link>
-            );
-          })}
-        </div>
-        <button onClick={() => setTools(true)} title="All tools">
-          <Menu size={20} />
-        </button>
-        <span className="rail-avatar">LM</span>
-      </aside>
-      <aside className="v2-context">
-        <div className="context-header">
-          <span>Workspace</span>
-          <ChevronDown size={15} />
-        </div>
+    <div className="v2-layout professional-shell">
+      {mobileOpen && (
         <button
-          className="command-trigger"
-          onClick={() => window.dispatchEvent(new Event("open-command"))}
+          className="professional-sidebar-scrim"
+          aria-label="Close navigation"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+      <aside className={`professional-sidebar ${mobileOpen ? "open" : ""}`}>
+        <Link
+          className="professional-brand"
+          to="/v2/"
+          onClick={() => setMobileOpen(false)}
         >
-          <Search size={17} /> Search anything <kbd>âŒ˜ K</kbd>
-        </button>
-        <div className="context-group">
-          <small>{current.label.toUpperCase()}</small>
-          {current.items.map(([path, label]) => (
-            <NavItem key={path} path={path} label={label} />
+          <span className="professional-brand-mark">5W</span>
+          <span>
+            <strong>5W Marketing</strong>
+            <small>LEAD GEN SUITE</small>
+          </span>
+        </Link>
+        <label className="professional-site-card">
+          <span className="professional-site-avatar">5</span>
+          <span className="professional-site-copy">
+            <strong>{site === "All sites" ? "All sites" : site}</strong>
+            <small>Workspace · {connectedSites.length} connected sites</small>
+          </span>
+          <ChevronDown size={15} />
+          <select
+            aria-label="Select site"
+            value={site}
+            onChange={(event) => setSite(event.target.value)}
+          >
+            <option>All sites</option>
+            {connectedSites.map((item) => (
+              <option key={item.name}>{item.name}</option>
+            ))}
+          </select>
+        </label>
+        <nav className="professional-sidebar-nav" aria-label="Main navigation">
+          {groups.map((group) => (
+            <section key={group.label}>
+              <h2>{group.label}</h2>
+              {group.items.map(([path, label]) => (
+                <NavItem
+                  key={path}
+                  path={path}
+                  label={label}
+                  close={() => setMobileOpen(false)}
+                />
+              ))}
+            </section>
           ))}
-        </div>
-        <div className="context-divider" />
-        <div className="context-group">
-          <small>PINNED</small>
-          <NavItem path="contacts" label="All contacts" />
-          <NavItem path="segments" label="High intent prospects" />
-          <NavItem path="campaigns" label="Active campaigns" />
-        </div>
-        <div className="context-footer">
-          <SiteSelect />
-          <VersionSelect />
+          <button
+            className="professional-all-tools"
+            onClick={() => setTools(true)}
+          >
+            <LayoutGrid size={17} /> All tools <ArrowRight size={14} />
+          </button>
+        </nav>
+        <div className="professional-sidebar-footer">
+          <NavItem
+            path="settings"
+            label="Settings"
+            close={() => setMobileOpen(false)}
+          />
+          <div className="professional-user">
+            <span>LM</span>
+            <div>
+              <strong>Preview workspace</strong>
+              <small>Design review</small>
+            </div>
+          </div>
         </div>
       </aside>
       <div className="v2-workspace">
-        <header className="v2-mobile-head">
-          <Brand />
-          <button className="icon-button" onClick={() => setTools(true)}>
-            <Menu />
+        <header className="professional-topbar">
+          <button
+            className="professional-menu-button"
+            onClick={() => setMobileOpen((current) => !current)}
+            aria-label="Open navigation"
+            aria-expanded={mobileOpen}
+          >
+            <PanelLeft size={18} />
           </button>
+          <span className="professional-topbar-title">Marketing Suite</span>
+          <span className="professional-topbar-divider" />
+          <SiteSelect />
+          <button
+            className="professional-topbar-search"
+            onClick={() => window.dispatchEvent(new Event("open-command"))}
+          >
+            <Search size={17} />
+            <span>Search contacts, campaigns, reports...</span>
+            <kbd>Ctrl K</kbd>
+          </button>
+          <button
+            className="icon-button professional-notification"
+            aria-label="Notifications"
+            onClick={() => toast("You're all caught up")}
+          >
+            <Bell size={18} />
+          </button>
+          <span className="professional-system-status">
+            <i /> All systems live
+          </span>
         </header>
         {children}
       </div>
       <AllTools open={tools} onClose={() => setTools(false)} />
-      <MobileNav openTools={() => setTools(true)} />
     </div>
   );
 }
@@ -718,17 +805,5 @@ function V5Layout({ children }: { children: ReactNode }) {
   );
 }
 export function Layout({ children }: { children: ReactNode }) {
-  const { version } = useApp();
-  switch (version) {
-    case "v1":
-      return <V1Layout>{children}</V1Layout>;
-    case "v2":
-      return <V2Layout>{children}</V2Layout>;
-    case "v3":
-      return <V3Layout>{children}</V3Layout>;
-    case "v4":
-      return <V4Layout>{children}</V4Layout>;
-    case "v5":
-      return <V5Layout>{children}</V5Layout>;
-  }
+  return <V2Layout>{children}</V2Layout>;
 }

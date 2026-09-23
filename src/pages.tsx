@@ -753,38 +753,94 @@ function Dashboard() {
     );
   if (version === "v2")
     return (
-      <div className="page dashboard dashboard-v2">
+      <div className="page dashboard dashboard-v2 professional-dashboard">
         <PageHead
-          eyebrow="MONDAY, SEPTEMBER 22"
-          title="Your relationships, in motion."
-          desc="A quieter view of the work that matters today."
+          eyebrow="WORKSPACE / OVERVIEW"
+          title="Dashboard"
+          desc="Lead activity, campaigns, and workflows across your connected sites."
           action={
             <ActionButton onClick={() => openModal("contact")}>
-              <Plus size={17} /> Add contact
+              <Plus size={17} /> New contact
             </ActionButton>
           }
         />
-        <div className="v2-dashboard-layout">
-          <section className="v2-hero-stat">
-            <span className="eyebrow">TOTAL RELATIONSHIPS</span>
-            <strong>
-              2,749<span>â†—</span>
-            </strong>
-            <p>
-              Across 3 sites, 46 active conversations, and 12 opportunities
-              ready for a next step.
-            </p>
-            <div className="v2-hero-foot">
-              <span>+18.4% this month</span>
-              <Link to="/v2/contacts">
-                View people <ArrowRight size={15} />
-              </Link>
+        <div className="professional-dashboard-toolbar">
+          <span>
+            <i /> Workspace overview
+          </span>
+          <PeriodSelect />
+        </div>
+        <div className="professional-metric-grid">
+          {[
+            {
+              label: "Total leads",
+              value: "2,749",
+              change: "+18.4%",
+              icon: Users,
+            },
+            {
+              label: "Qualified leads",
+              value: "836",
+              change: "+12.8%",
+              icon: Target,
+            },
+            {
+              label: "Active campaigns",
+              value: String(
+                campaigns.filter((c) => c.status === "Active").length,
+              ),
+              change: "Across all channels",
+              icon: Megaphone,
+            },
+            {
+              label: "Live workflows",
+              value: String(
+                automations.filter((a) => a.status === "Live").length,
+              ),
+              change: "Running now",
+              icon: Workflow,
+            },
+          ].map(({ label, value, change, icon: Icon }) => (
+            <div className="professional-metric" key={label}>
+              <div className="professional-metric-top">
+                <span>{label}</span>
+                <Icon size={18} />
+              </div>
+              <strong>{value}</strong>
+              <small>{change}</small>
             </div>
-          </section>
-          <section className="panel v2-next">
+          ))}
+        </div>
+        <div className="professional-dashboard-grid">
+          <section className="panel professional-performance">
             <SectionTitle
-              title="Needs your attention"
-              meta="Prioritized by recent activity"
+              title="Lead performance"
+              meta="New leads and conversions over time"
+              action={
+                <Link className="text-button" to="/v2/reports">
+                  View reports <ArrowRight size={15} />
+                </Link>
+              }
+            />
+            <div className="professional-chart-legend">
+              <span>
+                <i /> New leads
+              </span>
+              <span>
+                <i /> Qualified leads
+              </span>
+            </div>
+            <TrendChart second color="#ee7224" height={254} />
+          </section>
+          <section className="panel professional-attention">
+            <SectionTitle
+              title="Needs attention"
+              meta="Recent contact signals"
+              action={
+                <Link className="text-button" to="/v2/contacts">
+                  All contacts <ArrowRight size={15} />
+                </Link>
+              }
             />
             <div className="attention-list">
               {contacts.slice(0, 4).map((c, i) => (
@@ -813,20 +869,13 @@ function Dashboard() {
               ))}
             </div>
           </section>
-          <section className="panel v2-relationship">
-            <SectionTitle
-              title="Relationship momentum"
-              action={<PeriodSelect />}
-            />
-            <TrendChart color="#435ffc" height={240} />
-          </section>
-          <section className="panel v2-workflow">
+          <section className="panel professional-workflow">
             <SectionTitle
               title="Workflow canvas"
-              meta="New lead welcome · Live"
+              meta="New lead welcome · Live automation"
               action={
                 <Link className="text-button" to="/v2/automations">
-                  Open canvas <ArrowRight size={15} />
+                  Open workflow <ArrowRight size={15} />
                 </Link>
               }
             />
@@ -865,6 +914,37 @@ function Dashboard() {
               <span>
                 <CheckCircle2 size={14} /> 78% completed
               </span>
+            </div>
+          </section>
+          <section className="panel professional-campaigns">
+            <SectionTitle
+              title="Campaigns in progress"
+              meta="Current delivery status"
+              action={
+                <Link className="text-button" to="/v2/campaigns">
+                  View campaigns <ArrowRight size={15} />
+                </Link>
+              }
+            />
+            <div className="professional-campaign-list">
+              {campaigns.slice(0, 3).map((campaign) => (
+                <Link to="/v2/campaigns" key={campaign.id}>
+                  <span className="professional-campaign-icon">
+                    <Mail size={17} />
+                  </span>
+                  <span className="professional-campaign-copy">
+                    <strong>{campaign.name}</strong>
+                    <small>
+                      {campaign.channel} · {campaign.audience}
+                    </small>
+                  </span>
+                  <span
+                    className={`professional-campaign-status status-${campaign.status.toLowerCase()}`}
+                  >
+                    {campaign.status}
+                  </span>
+                </Link>
+              ))}
             </div>
           </section>
         </div>
@@ -2463,8 +2543,50 @@ function Settings({ subpage }: { subpage: string }) {
       <PageHead
         eyebrow="WORKSPACE / PREFERENCES"
         title="Settings"
-        desc="Make this workspace feel like yours. Manage your team, notifications, billing, and security."
+        desc="Manage workspace preferences, connections, access, and billing."
       />
+      {active === "general" && (
+        <div className="professional-settings-tiles">
+          <button
+            onClick={() =>
+              document
+                .getElementById("workspace-details")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
+          >
+            <span>
+              <Settings2 size={19} />
+            </span>
+            <strong>Workspace details</strong>
+            <small>Name, domain, and time zone</small>
+            <ArrowRight size={15} />
+          </button>
+          <Link to="/v2/sites">
+            <span>
+              <Globe2 size={19} />
+            </span>
+            <strong>Connected sites</strong>
+            <small>Publishing and lead capture</small>
+            <ArrowRight size={15} />
+          </Link>
+          <Link to="/v2/integrations">
+            <span>
+              <LayoutGrid size={19} />
+            </span>
+            <strong>Integrations</strong>
+            <small>Connected tools and services</small>
+            <ArrowRight size={15} />
+          </Link>
+          <Link to="/v2/settings/security">
+            <span>
+              <ShieldCheck size={19} />
+            </span>
+            <strong>Security & access</strong>
+            <small>Sign-in and account protection</small>
+            <ArrowRight size={15} />
+          </Link>
+        </div>
+      )}
       <div className="settings-layout">
         <nav className="settings-nav">
           {[
@@ -2487,7 +2609,7 @@ function Settings({ subpage }: { subpage: string }) {
         <section className="settings-content">
           {active === "general" ? (
             <>
-              <div className="settings-section-heading">
+              <div className="settings-section-heading" id="workspace-details">
                 <div>
                   <h2>Workspace details</h2>
                   <p>Basic information and defaults for the 5W network.</p>

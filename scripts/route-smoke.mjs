@@ -25,22 +25,20 @@ try {
   ];
   paths.push("contacts/contact-001");
   let checked = 0;
-  for (const version of ["v1", "v2", "v3", "v4", "v5"]) {
-    for (const path of paths) {
-      const route = `/${version}/${path}`;
-      const html = renderToString(
-        React.createElement(
-          MemoryRouter,
-          { initialEntries: [route] },
-          React.createElement(App),
-        ),
-      );
-      if (!html.includes('class="page ') && !html.includes('class="page"'))
-        throw new Error(`${route} rendered no page`);
-      if (html.includes("Page not found") || html.includes("Contact not found"))
-        throw new Error(`${route} rendered a missing page`);
-      checked++;
-    }
+  for (const path of paths) {
+    const route = `/v2/${path}`;
+    const html = renderToString(
+      React.createElement(
+        MemoryRouter,
+        { initialEntries: [route] },
+        React.createElement(App),
+      ),
+    );
+    if (!html.includes('class="page ') && !html.includes('class="page"'))
+      throw new Error(`${route} rendered no page`);
+    if (html.includes("Page not found") || html.includes("Contact not found"))
+      throw new Error(`${route} rendered a missing page`);
+    checked++;
   }
   const home = renderToString(
     React.createElement(
@@ -49,8 +47,8 @@ try {
       React.createElement(App),
     ),
   );
-  if (!home.includes("Five perspectives."))
-    throw new Error("Comparison page did not render");
+  if (!home.includes("Dashboard") || home.includes("Five perspectives."))
+    throw new Error("The single workspace did not render at the root");
   const { default: PreviewGate } = await vite.ssrLoadModule(
     "/src/preview-gate.tsx",
   );
@@ -62,12 +60,12 @@ try {
     ),
   );
   if (
-    !locked.includes("Access the preview") ||
+    !locked.includes("Password") ||
     locked.includes("PRIVATE_PREVIEW_CONTENT")
   )
     throw new Error("Preview gate did not conceal the app");
   console.log(
-    `Rendered ${checked} nested routes, the comparison page, and the locked preview successfully.`,
+    `Rendered ${checked} workspace routes, the root dashboard, and the locked preview successfully.`,
   );
 } finally {
   await vite.close();

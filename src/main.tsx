@@ -12,6 +12,7 @@ import "./overlays.css";
 import "./responsive.css";
 import "./enhancements.css";
 import "./iteration.css";
+import "./professional.css";
 
 const Router =
   import.meta.env.VITE_GITHUB_PAGES === "true" ? HashRouter : BrowserRouter;

@@ -15,7 +15,6 @@ import {
   Routes,
   useLocation,
   useNavigate,
-  useParams,
 } from "react-router-dom";
 import {
   AlertTriangle,
@@ -102,119 +101,10 @@ export const useApp = () => {
   return value;
 };
 
-function Home() {
-  return (
-    <main className="compare-page">
-      <div className="compare-glow" />
-      <header className="compare-header">
-        <div className="brand-mark">5W</div>
-        <span>5W Marketing Lead Gen</span>
-        <span className="compare-header-note">Design explorations · 2026</span>
-      </header>
-      <section className="compare-hero">
-        <div className="eyebrow">
-          FIVE WAYS FORWARD <span> / INTERACTIVE CONCEPTS</span>
-        </div>
-        <h1>
-          One platform.
-          <br />
-          <em>Five perspectives.</em>
-        </h1>
-        <p>
-          Explore five distinct directions for a connected CRM, marketing
-          automation, lead capture, and analytics experience.
-        </p>
-        <div className="hero-meta">
-          <span>
-            <i /> 5 live concepts
-          </span>
-          <span>25+ modules each</span>
-          <span>Shared realistic data</span>
-        </div>
-      </section>
-      <section className="compare-list" aria-label="Design proposals">
-        {proposals.map((p, index) => (
-          <article
-            className={`proposal-card proposal-${p.version}`}
-            key={p.version}
-          >
-            <div className="proposal-copy">
-              <div className="proposal-index">
-                0{index + 1} <span> / 05</span>
-              </div>
-              <div>
-                <div className="proposal-kicker">{p.subtitle}</div>
-                <h2>{p.name}</h2>
-                <p>{p.description}</p>
-              </div>
-              <div className="proposal-bottom">
-                <div className="proposal-palette">
-                  {p.colors.map((c) => (
-                    <i key={c} style={{ background: c }} />
-                  ))}
-                  <span>{p.navigation}</span>
-                </div>
-                <Link className="proposal-open" to={`/${p.version}/`}>
-                  Explore concept <ArrowRight size={18} />
-                </Link>
-              </div>
-            </div>
-            <Link
-              className={`preview preview-${p.version}`}
-              to={`/${p.version}/`}
-              aria-label={`Open ${p.name}`}
-            >
-              <div className="preview-top">
-                <b>5W</b>
-                <span className="preview-dots">•••</span>
-              </div>
-              <div className="preview-inner">
-                <div className="preview-mini-nav">
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                </div>
-                <div className="preview-main">
-                  <div className="preview-heading" />
-                  <div className="preview-stats">
-                    <span />
-                    <span />
-                    <span />
-                  </div>
-                  <div className="preview-chart">
-                    <i />
-                    <i />
-                    <i />
-                    <i />
-                    <i />
-                    <i />
-                    <i />
-                    <i />
-                  </div>
-                  <div className="preview-lines">
-                    <span />
-                    <span />
-                    <span />
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </article>
-        ))}
-      </section>
-      <footer className="compare-footer">
-        5W Marketing Lead Gen <span>Prototype concepts · Frontend only</span>
-      </footer>
-    </main>
-  );
-}
-
 function VersionApp() {
-  const { version: raw } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const version = raw as Version;
+  const version: Version = "v2";
   const [site, setSite] = useState("All sites");
   const [period, setPeriod] = useState("Last 30 days");
   const [contacts, setContacts] = useState(contactsSeed);
@@ -441,8 +331,6 @@ function VersionApp() {
       mobileMenu,
     ],
   );
-  if (!proposals.some((x) => x.version === version))
-    return <Navigate to="/" replace />;
   return (
     <AppContext.Provider value={ctx}>
       <div className={`app-shell theme-${version}`}>
@@ -945,9 +833,9 @@ function CommandPalette() {
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/:version/*" element={<VersionApp />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="/" element={<VersionApp />} />
+      <Route path="/v2/*" element={<VersionApp />} />
+      <Route path="*" element={<Navigate to="/v2/" replace />} />
     </Routes>
   );
 }
